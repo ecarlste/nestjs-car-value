@@ -9,6 +9,7 @@ import {
   Query,
 } from '@nestjs/common';
 import { Serialize } from '../interceptors/serialize.interceptor';
+import { AuthService } from './auth.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UserDto } from './dto/user.dto';
 import { UsersService } from './users.service';
@@ -16,11 +17,19 @@ import { UsersService } from './users.service';
 @Serialize(UserDto)
 @Controller('auth')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(
+    private readonly usersService: UsersService,
+    private readonly authService: AuthService,
+  ) {}
 
   @Post('signup')
   createUser(@Body() body: CreateUserDto) {
-    this.usersService.create(body.email, body.password);
+    this.authService.signup(body.email, body.password);
+  }
+
+  @Post('signin')
+  signin(@Body() body: CreateUserDto) {
+    return this.authService.signin(body.email, body.password);
   }
 
   @Get()
