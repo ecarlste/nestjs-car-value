@@ -4,7 +4,7 @@ import { User } from '../user.entity';
 import { UsersService } from '../users.service';
 
 export interface RequestWithUser extends Request {
-  user?: User;
+  currentUser?: User;
 }
 
 @Injectable()
@@ -17,7 +17,7 @@ export class CurrentUserMiddleware implements NestMiddleware {
     if (userId) {
       const user = await this.usersService.findOne(userId);
 
-      req.user = user;
+      req.currentUser = user;
     }
 
     next();
