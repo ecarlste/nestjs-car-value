@@ -4,13 +4,13 @@ import {
   Param,
   Patch,
   Post,
+  Req,
   UseGuards,
 } from '@nestjs/common';
 import { AdminGuard } from '../guards/admin.guard';
 import { AuthGuard } from '../guards/auth.guard';
 import { Serialize } from '../interceptors/serialize.interceptor';
-import { CurrentUser } from '../users/decorators/current-user.decorator';
-import { User } from '../users/user.entity';
+import { RequestWithUser } from '../users/middleware/current-user.middleware';
 import { ApproveReportDto } from './dto/approve-report.dto';
 import { CreateReportDto } from './dto/create-report.dto';
 import { ReportDto } from './dto/report.dto';
@@ -23,8 +23,8 @@ export class ReportsController {
   @Post()
   @UseGuards(AuthGuard)
   @Serialize(ReportDto)
-  createReport(@Body() body: CreateReportDto, @CurrentUser() user: User) {
-    return this.reportsService.create(body, user);
+  createReport(@Body() body: CreateReportDto, @Req() request: RequestWithUser) {
+    return this.reportsService.create(body, request.user);
   }
 
   @Patch('/:id')
