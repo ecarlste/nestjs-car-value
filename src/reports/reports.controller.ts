@@ -1,9 +1,11 @@
 import {
   Body,
   Controller,
+  Get,
   Param,
   Patch,
   Post,
+  Query,
   Req,
   UseGuards,
 } from '@nestjs/common';
@@ -13,6 +15,7 @@ import { Serialize } from '../interceptors/serialize.interceptor';
 import { RequestWithUser } from '../users/middleware/current-user.middleware';
 import { ApproveReportDto } from './dto/approve-report.dto';
 import { CreateReportDto } from './dto/create-report.dto';
+import { GetEstimateDto } from './dto/get-estimate.dto';
 import { ReportDto } from './dto/report.dto';
 import { ReportsService } from './reports.service';
 
@@ -25,6 +28,11 @@ export class ReportsController {
   @Serialize(ReportDto)
   createReport(@Body() body: CreateReportDto, @Req() request: RequestWithUser) {
     return this.reportsService.create(body, request.currentUser);
+  }
+
+  @Get()
+  getEstimate(@Query() query: GetEstimateDto) {
+    console.log(query);
   }
 
   @Patch('/:id')
