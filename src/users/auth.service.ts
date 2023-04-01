@@ -36,8 +36,6 @@ export class AuthService {
     const hash = scryptSync(password, salt, 64).toString('hex');
 
     if (hash !== storedHash) {
-      console.log('hash', hash);
-      console.log('storedHash', storedHash);
       throw new BadRequestException('bad password');
     }
 
